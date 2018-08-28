@@ -1,10 +1,59 @@
-import {StackNavigator} from 'react-navigation'
+import {StackNavigator,TabNavigator,TabBarBottom,} from 'react-navigation'
 import HomePage from '../pages/HomePage'
 import Page1 from '../pages/Page1'
 import Page2 from '../pages/Page2'
 import Page3 from '../pages/Page3'
 import React from 'react'
-import {Button} from 'react-native'
+import {Button,Platform} from 'react-native'
+import Ionicons from 'react-native-vector-icons'
+
+export const AppTabNavigator=TabNavigator({
+    Page1:{
+        screen:Page1,
+        NavigationOptions:{
+            tabBarLabel:'Page1',
+            tabBarIcon:({tintColor,focused})=>(
+                <Ionicons
+                    name={focused?'ios-home':'ios-home-outline'}
+                    size={26}
+                    style={{color:tintColor}}
+                />
+            )
+        }
+    },
+    Page2:{
+        screen:Page2,
+        NavigationOptions:{
+            tabBarLabel:'Page2',
+            tabBarIcon:({tintColor,focused})=>(
+                <Ionicons
+                    name={focused?'ios-people':'ios-home-people'}
+                    size={26}
+                    style={{color:tintColor}}
+                />
+            )
+        }
+    },
+    Page3:{
+        screen:Page3,
+        NavigationOptions:{
+            tabBarLabel:'Page3',
+            tabBarIcon:({tintColor,focused})=>(
+                <Ionicons
+                    name={focused?'ios-chatboxes':'ios-home-chatboxes'}
+                    size={26}
+                    style={{color:tintColor}}
+                />
+            )
+        }
+    }
+},{
+    tabBarOptions: {
+        activeTintColor: Platform.OS === 'android' ? '#2d5b8a' : '#000',
+
+    },
+    tabBarPosition:'bottom',
+})
 
 export const AppStackNavigator = StackNavigator({
     HomePage: {
@@ -40,6 +89,12 @@ export const AppStackNavigator = StackNavigator({
                     />
                 )
             }
+        }
+    },
+    TabNav:{
+        screen:AppTabNavigator,
+        navigationOptions:{
+            title:'This is TabNavigator'
         }
     }
 });
