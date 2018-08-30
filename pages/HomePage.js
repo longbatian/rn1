@@ -36,6 +36,12 @@ export default class App extends React.Component {
                         navigation.navigate('TabNav',{title:'23232'})
                     }}
                 />
+                <Button
+                    title="go to DrawerNavigator"
+                    onPress={() => {
+                        navigation.navigate('DrawerNav',{title:'DrawerNavigator'})
+                    }}
+                />
             </View>
         );
     }

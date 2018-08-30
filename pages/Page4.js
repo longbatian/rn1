@@ -1,35 +1,36 @@
 import React from 'react';
 import {StyleSheet, Text, View, Button} from 'react-native';
 
-export default class Page2 extends React.Component {
+export default class Page4 extends React.Component {
     render() {
         const {navigation} = this.props;
         return (
-            <View style={styles.container}>
-                <Text style={styles.texts}>欢迎来到page2 </Text>
+            <View style={{flex: 1, backgroundColor: 'gray'}}>
+                <Text style={styles.texts}>
+                    欢迎来到page4
+                </Text>
                 <Button
-                    title="go back"
+                    title="Open Drawer"
                     onPress={() => {
-                        navigation.goBack();
+                        navigation.openDrawer();
+                        // this.props.navigation.openDrawer();
                     }}
                 />
                 <Button
-                    title="go Page1"
+                    title="Toggle Drawer"
                     onPress={() => {
-                        navigation.navigate('Page1');
+                        navigation.toggleDrawer();
+                        // navigation.navigate('DrawerToggle');
                     }}
                 />
                 <Button
-                    title="改变主题"
+                    title="Go to Page5"
                     onPress={() => {
-                        navigation.setParams({
-                            theme: {
-                                tintColor: 'red',
-                                updateTime: new Date().getTime(),
-                            }
-                        });
+                        navigation.navigate('Page5');
                     }}
                 />
+
+
             </View>
         );
     }

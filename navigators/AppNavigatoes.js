@@ -1,58 +1,132 @@
-import {StackNavigator,TabNavigator,TabBarBottom,} from 'react-navigation'
+import {
+    StackNavigator,
+    TabNavigator,
+    TabBarBottom,
+    DrawerNavigator,
+    SafeAreaView,
+    DrawerItems
+} from 'react-navigation'
 import HomePage from '../pages/HomePage'
 import Page1 from '../pages/Page1'
 import Page2 from '../pages/Page2'
 import Page3 from '../pages/Page3'
+import Page4 from '../pages/Page4'
+import Page5 from '../pages/Page5'
 import React from 'react'
-import {Button,Platform} from 'react-native'
-import Ionicons from 'react-native-vector-icons'
+import {Button, Platform, ScrollView, Text, Image, View} from 'react-native'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
-export const AppTabNavigator=TabNavigator({
-    Page1:{
-        screen:Page1,
-        NavigationOptions:{
-            tabBarLabel:'Page1',
-            tabBarIcon:({tintColor,focused})=>(
-                <Ionicons
-                    name={focused?'ios-home':'ios-home-outline'}
-                    size={26}
-                    style={{color:tintColor}}
+class TabBarComponent extends React.Component {
+    constructor(props) {
+        super(props)
+        this.theme = {
+            tintColor: props.activeTintColor,
+            updateTime: new Date().getTime()
+        };
+    }
+
+    render() {
+        const {routes, index} = this.props.navigationState;
+        const {theme} = routes[index].params;
+        if (theme && theme.updateTime > this.theme.updateTime) {
+            this.theme = theme
+        }
+        return <TabBarBottom
+            {...this.props}
+            activeTintColor={this.theme.tintColor || this.props.activeTintColor}
+        />
+    }
+}
+
+export const DrawerNav = DrawerNavigator({
+    Page4: {
+        screen: Page4,
+        NavigationOptions: {
+            drawerLabel: 'Page4',
+            drawerIcon: ({tintColor}) => (
+                <MaterialIcons
+                    name={"drafts"}
+                    size={24}
+                    style={{color: tintColor}}
                 />
             )
         }
     },
-    Page2:{
-        screen:Page2,
-        NavigationOptions:{
-            tabBarLabel:'Page2',
-            tabBarIcon:({tintColor,focused})=>(
-                <Ionicons
-                    name={focused?'ios-people':'ios-home-people'}
-                    size={26}
-                    style={{color:tintColor}}
-                />
-            )
-        }
-    },
-    Page3:{
-        screen:Page3,
-        NavigationOptions:{
-            tabBarLabel:'Page3',
-            tabBarIcon:({tintColor,focused})=>(
-                <Ionicons
-                    name={focused?'ios-chatboxes':'ios-home-chatboxes'}
-                    size={26}
-                    style={{color:tintColor}}
+    Page5: {
+        screen: Page5,
+        NavigationOptions: {
+            drawerLabel: 'Page5',
+            drawerIcon: ({tintColor}) => (
+                <MaterialIcons
+                    name={"drafts"}
+                    size={24}
+                    style={{color: tintColor}}
                 />
             )
         }
     }
-},{
+}, {
+    initialRouteName: 'Page5',
+    contentOptions: {
+        activeTintColor: "#e78"
+    },
+    contentComponent: (props) => (
+        <ScrollView style={{backgroundColor: '#987666', flex: 1}}>
+            <SafeAreaView>
+                <DrawerItems {...props}/>
+            </SafeAreaView>
+        </ScrollView>
+    )
+})
+
+export const AppTabNavigator = TabNavigator({
+    Page1: {
+        screen: Page1,
+        navigationOptions: {
+            tabBarLabel: 'Page2',
+            tabBarIcon: ({tintColor, focused}) => (
+                <Ionicons
+                    name={focused ? 'ios-home' : 'ios-home'}
+                    size={26}
+                    style={{color: tintColor}}
+                />
+            )
+        }
+    },
+    Page2: {
+        screen: Page2,
+        navigationOptions: {
+            tabBarLabel: 'Page2',
+            tabBarIcon: ({tintColor, focused}) => (
+                <Ionicons
+                    name={focused ? 'ios-people' : 'ios-people'}
+                    size={26}
+                    style={{color: tintColor}}
+                />
+            )
+        }
+    },
+    Page3: {
+        screen: Page2,
+        navigationOptions: {
+            tabBarLabel: 'Page2',
+            tabBarIcon: ({tintColor, focused}) => (
+                <Ionicons
+                    name={focused ? 'ios-clipboard' : 'ios-clipboard'}
+                    size={26}
+                    style={{color: tintColor}}
+                />
+            )
+        }
+    }
+}, {
     tabBarOptions: {
-        activeTintColor: Platform.OS === 'android' ? '#2d5b8a' : '#000',
+        activeTintColor: Platform.OS === 'android' ? '#e91e61' : '#fff',
 
     },
-    tabBarPosition:'bottom',
+    tabBarComponent: TabBarComponent,
+    // tabBarPosition: 'bottom',
 })
 
 export const AppStackNavigator = StackNavigator({
@@ -83,7 +157,7 @@ export const AppStackNavigator = StackNavigator({
                 headerRight: (
                     <Button
                         title={params.mode === 'edit' ? '保存' : '编辑'}
-                        onPress={() =>  {
+                        onPress={() => {
                             setParams({mode: params.mode === 'edit' ? "" : 'edit'})
                         }}
                     />
@@ -91,10 +165,16 @@ export const AppStackNavigator = StackNavigator({
             }
         }
     },
-    TabNav:{
-        screen:AppTabNavigator,
-        navigationOptions:{
-            title:'This is TabNavigator'
+    TabNav: {
+        screen: AppTabNavigator,
+        navigationOptions: {
+            title: 'This is TabNavigator'
+        }
+    },
+    DrawerNav: {
+        screen: DrawerNav,
+        navigationOptions: {
+            title: 'This is DrawerNavigator'
         }
     }
 });
