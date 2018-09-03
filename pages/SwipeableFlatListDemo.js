@@ -4,12 +4,14 @@ import {
     FlatList,
     Text, View,
     RefreshControl,
-    ActivityIndicator
+    ActivityIndicator,
+    SwipeableFlatList,
+    TouchableHighlight,
 } from 'react-native';
 // import {AppStackNavigator} from './navigators/AppNavigatoes'
 const CITY_NAMES = ['北京', '上海', '成都', '隆昌', '凉山']
 
-export default class FlatListDemo extends Component<props> {
+export default class SwipeableFlatListDemo extends Component<props> {
     constructor(props) {
         super(props)
         this.state = {
@@ -40,7 +42,7 @@ export default class FlatListDemo extends Component<props> {
                     dataArray.push(this.state.dataArray[i])
                 }
             } else {
-                dataArray=this.state.dataArray.concat(CITY_NAMES);
+                dataArray = this.state.dataArray.concat(CITY_NAMES);
             }
             this.setState({
                 dataArray: dataArray,
@@ -61,10 +63,24 @@ export default class FlatListDemo extends Component<props> {
         </View>
     }
 
+    genQuickActions() {
+        return <View style={styles.touchable}>
+            <TouchableHighlight
+                onPress={() => {
+                    alert('确认删除？')
+                }}
+            >
+                <View style={styles.quick}>
+                    <Text style={styles.text}>删除</Text>
+                </View>
+            </TouchableHighlight>
+        </View>
+    }
+
     render() {
         return (
             <View style={styles.contain}>
-                <FlatList
+                <SwipeableFlatList
                     data={this.state.dataArray}
                     renderItem={(data) => this._renderItem(data)}
                     // refreshing={this.state.isLoading}
@@ -76,7 +92,7 @@ export default class FlatListDemo extends Component<props> {
                             title={'Loading'}
                             colors={['red']}//android
                             tintColor={['orange']}//ios
-                            title={['red']}
+                            titleColor={['red']}
                             refreshing={this.state.isLoading}
                             onRefresh={() => {
                                 this.LoadDate(true)
@@ -84,9 +100,13 @@ export default class FlatListDemo extends Component<props> {
                         />
                     }
                     ListFooterComponent={() => this.genIndicator()}
+                    onEndReachedThreshold={1}
                     onEndReached={() => {
                         this.LoadDate()
                     }}
+                    renderQuickActions={() => this.genQuickActions()}
+                    maxSwipeDistance={200}
+                    bounceFirstRowOnMount={false}
                 />
             </View>
         )
@@ -105,7 +125,7 @@ const styles = StyleSheet.create({
     },
     item: {
         backgroundColor: "#169",
-        height: 200,
+        height: 120,
         width: 300,
         marginRight: 15,
         marginLeft: 15,
@@ -123,5 +143,22 @@ const styles = StyleSheet.create({
     indicator: {
         margin: 10,
         color: 'red'
-    }
+    },
+    touchable: {
+
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginBottom: 15,
+        marginRight: 15,
+    },
+    quick: {
+        width:100,
+        backgroundColor: 'red',
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    s: {}
+
 })

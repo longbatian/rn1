@@ -4,12 +4,15 @@ import {
     FlatList,
     Text, View,
     RefreshControl,
-    ActivityIndicator
+    ActivityIndicator,
+    SectionList
 } from 'react-native';
 // import {AppStackNavigator} from './navigators/AppNavigatoes'
-const CITY_NAMES = ['北京', '上海', '成都', '隆昌', '凉山']
+const CITY_NAMES = [
+    {data:['北京', '上海', '成都', '隆昌', '凉山'],title:'一线'},
+    {data:['成都', '上海', '成都', '隆昌', '凉山'],title:'2线'}]
 
-export default class FlatListDemo extends Component<props> {
+export default class SectionListDemo extends Component<props> {
     constructor(props) {
         super(props)
         this.state = {
@@ -60,12 +63,16 @@ export default class FlatListDemo extends Component<props> {
             <Text>正在加载更多</Text>
         </View>
     }
-
+    _renderSectionHeader({section}){
+        return <View style={styles.sectionHead}>
+            <Text style={styles.text}>{section.title}</Text>
+        </View>
+    }
     render() {
         return (
             <View style={styles.contain}>
-                <FlatList
-                    data={this.state.dataArray}
+                <SectionList
+                    sections={CITY_NAMES}
                     renderItem={(data) => this._renderItem(data)}
                     // refreshing={this.state.isLoading}
                     // onRefresh={() => {
@@ -87,6 +94,8 @@ export default class FlatListDemo extends Component<props> {
                     onEndReached={() => {
                         this.LoadDate()
                     }}
+                    renderSectionHeader={(data)=> this._renderSectionHeader(data)}
+                    ItemSeparatorComponent={()=><View style={styles.separator}/>}
                 />
             </View>
         )
@@ -95,26 +104,22 @@ export default class FlatListDemo extends Component<props> {
 const styles = StyleSheet.create({
     contain: {
         flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontSize: 60
+        backgroundColor: '#fafafa',
+
     },
     texts: {
+        color:'#666',
         fontSize: 30
     },
     item: {
-        backgroundColor: "#169",
-        height: 200,
+        color:'#666',
         width: 300,
-        marginRight: 15,
-        marginLeft: 15,
         marginBottom: 15,
         alignItems: 'center',
         justifyContent: 'center'
     },
     text: {
-        color: 'white',
+        color: '#666',
         fontSize: 20,
     },
     indicatorContainer: {
@@ -123,5 +128,15 @@ const styles = StyleSheet.create({
     indicator: {
         margin: 10,
         color: 'red'
+    },
+    sectionHead:{
+        height: 50,
+        backgroundColor:'#93ebbe',
+        alignItems:'center',
+        justifyContent:'center'
+    },
+    separator:{
+        height:1,
+        backgroundColor:'gray'
     }
 })
